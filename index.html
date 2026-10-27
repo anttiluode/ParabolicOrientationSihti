@@ -360,9 +360,12 @@ fetch("results/TEST.json").then(r => r.ok ? r.json() : Promise.reject()).then(T 
     H2_ray_vs_parabolic: "H2 paper's ray window beats parabolic steps", H3_coherence_vs_magnitude: "H3 coherence ranking beats magnitude",
     ctl_parabolic_vs_antiparabolic: "control: parabolic vs anti-parabolic", ctl_parabolic_vs_iso: "control: parabolic vs isotropic",
     ctl_fixed8_vs_iso: "control: fixed 8 vs isotropic", ctl_sp8_vs_fixed8: "control: steerable pyramid vs fixed 8",
-    ctl_fixed8_coherence_vs_magnitude: "control: coherence ranking on fixed 8"};
+    ctl_fixed8_coherence_vs_magnitude: "control: coherence ranking on fixed 8",
+    H0_parabolic_vs_iso: "H0 parabolic beats isotropic Sihti", H3b_coherence_moves_budget_to_boundaries: "H3b coherence ranking moves budget onto boundaries (boundary metric)",
+    H1m_parabolic_vs_fixed8_matched: "H1m parabolic beats fixed 8 at equal PSNR", H1mk_parabolic_vs_sp8_matched: "H1mk parabolic beats steerable pyramid at equal PSNR",
+    H0m_parabolic_vs_iso_matched: "control: parabolic vs isotropic at equal PSNR (166/200 out of range: not readable)"};
   let h = `<p class="note">${T.images} test images · budget ${(100 * D.budget).toFixed(0)}% · metric: Sihti G4 alignment of the rebuild · rule: ${D.rule}. Hypotheses are pre-registered in PREREG.md; controls are reported, not decided.</p><table><tr><th>comparison</th><th>mean a</th><th>mean b</th><th>wins / losses</th><th>sign p</th><th></th></tr>`;
-  for (const [k, c] of rows) h += `<tr><td>${nice[k] || k}</td><td>${c.mean_a.toFixed(4)}</td><td>${c.mean_b.toFixed(4)}</td><td>${c.wins} / ${c.losses}</td><td>${c.p_sign.toExponential(1)}</td><td class="${c.pass ? "pass" : "fail"}">${k.startsWith("ctl") ? (c.pass ? "a wins" : "no") : (c.pass ? "PASS" : "FAIL")}</td></tr>`;
+  for (const [k, c] of rows) h += `<tr><td>${nice[k] || k}</td><td>${c.mean_a.toFixed(4)}</td><td>${c.mean_b.toFixed(4)}</td><td>${c.wins} / ${c.losses}</td><td>${c.p_sign.toExponential(1)}</td><td class="${c.pass ? "pass" : "fail"}">${!c.decided ? (c.pass ? "a wins" : "no") : (c.pass ? "PASS" : "FAIL")}</td></tr>`;
   $("res").innerHTML = h + "</table>";
 }).catch(() => { $("res").textContent = "results/TEST.json not published yet."; });
 </script>

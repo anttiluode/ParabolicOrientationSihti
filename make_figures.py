@@ -66,7 +66,7 @@ def fig_curves(T, path="figures/budget_curves.png"):
                          "PSNR of the rebuild (dB)"]):
         a.set_xscale("log"); a.set_xlabel("budget, % of image reals"); a.set_title(t, fontsize=11)
         a.set_xticks(xs); a.set_xticklabels([f"{x:g}" for x in xs])
-    ax[0].legend(fontsize=8, loc="lower right")
+    ax[0].legend(fontsize=8, loc="upper left", bbox_to_anchor=(0.0, 0.93), framealpha=0.9)
     fig.suptitle(f"BSDS500 test, n = {T['images']}", fontsize=11)
     fig.tight_layout()
     fig.savefig(path, dpi=110)
