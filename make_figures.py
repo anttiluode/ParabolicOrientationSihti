@@ -113,4 +113,6 @@ if __name__ == "__main__":
     if os.path.exists("results/TEST.json"):
         T = json.load(open("results/TEST.json"))
         fig_curves(T)
-        fig_examples(["100075", "101087", "103078", "104022"], T["decisions"]["budget"])
+        # first four test images in sorted order: not chosen by result
+        names = [os.path.splitext(os.path.basename(p))[0] for p in list_split(BSDS, "test")[:4]]
+        fig_examples(names, float(T["decisions"]["budget"]))

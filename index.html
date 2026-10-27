@@ -50,7 +50,7 @@ a{color:var(--acc2)}
     <option value="iso">isotropic (Sihti radial)</option>
   </select></label>
   <label>ranking <select id="rank"><option value="magnitude">magnitude |b|</option><option value="coherence">cross-scale coherence</option></select></label>
-  <label>budget <input type="range" id="budget" min="0" max="100" value="38"><span class="stat" id="budgetv"></span></label>
+  <label>budget <input type="range" id="budget" min="0" max="100" value="77"><span class="stat" id="budgetv"></span></label>
 </div>
 <div id="status"></div>
 
@@ -262,7 +262,11 @@ function show(canvas, a, mode) {
   if (mode === "signed") { let m = 1e-9; for (const v of a) m = Math.max(m, Math.abs(v)); lo = -m; hi = m; }
   for (let i = 0; i < S * S; i++) {
     let v = (a[i] - lo) / (hi - lo); v = Math.max(0, Math.min(1, v));
-    if (mode === "signed") { const t = a[i] / hi; const r = t > 0 ? 255 * (0.5 + 0.5 * t) : 255 * (0.5 + 0.5 * t) * 0.55, b = t < 0 ? 255 * (0.5 - 0.5 * t) : 255 * (0.5 - 0.5 * t) * 0.55, g = 255 * (0.5 - 0.15 * Math.abs(t)); d.data.set([r, g, b, 255], 4 * i); }
+    if (mode === "signed") {          // 0 = neutral grey, + = amber, - = teal
+      const t = Math.max(-1, Math.min(1, a[i] / hi)), u = Math.abs(t), base = 120;
+      const tgt = t > 0 ? [235, 170, 60] : [60, 170, 205];
+      d.data.set([base + (tgt[0] - base) * u, base + (tgt[1] - base) * u, base + (tgt[2] - base) * u, 255], 4 * i);
+    }
     else d.data.set([255 * v, 255 * v, 255 * v, 255], 4 * i);
   }
   ctx.putImageData(d, 0, 0);
