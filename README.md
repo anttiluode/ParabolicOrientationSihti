@@ -34,9 +34,9 @@ Decision rule: higher mean, wins on ≥ 60 % of images, sign test p < 0.01.
 | | claim (a beats b) | wins / losses | mean a vs b | p | predicted | outcome |
 |---|---|---|---|---|---|---|
 | H1 | parabolic > fixed 8 | 145 / 55 | 0.126 vs 0.112 | 1.5e-10 | pass | **PASS** |
-| H1k | parabolic > steerable pyramid (**kill condition**) | 171 / 29 | 0.126 vs 0.105 | 1e-25 | pass | **PASS**: not killed |
+| H1k | parabolic > steerable-pyramid angular windows, sp8 (**kill condition**) | 171 / 29 | 0.126 vs 0.105 | 1e-25 | pass | **PASS**: not killed |
 | H1m | parabolic > fixed 8 **at equal PSNR** | 112 / 88 | 0.116 vs 0.112 | 0.10 | uncertain | fail |
-| H1mk | parabolic > steerable pyramid **at equal PSNR** | 134 / 66 | 0.111 vs 0.105 | 1.7e-6 | uncertain | **PASS** |
+| H1mk | parabolic > sp8 **at equal PSNR** | 134 / 66 | 0.111 vs 0.105 | 1.7e-6 | uncertain | **PASS** |
 | H2 | ray (the paper's window) > parabolic steps | 82 / 118 | 0.125 vs 0.126 | 0.013 | fail | fail |
 | H3 | coherence ranking > magnitude (G4 alignment) | 45 / 155 | 0.107 vs 0.126 | 2e-15 | fail | fail |
 | H3b | coherence ranking puts kept detail on human boundaries | 148 / 52 | 0.090 vs 0.035 | 7e-12 | pass | **PASS** |
@@ -47,7 +47,7 @@ Decision rule: higher mean, wins on ≥ 60 % of images, sign test p < 0.01.
 ## What it means
 
 **1. The direction law matters, and parabolic is the right one.** At equal redundancy
-(48 bands each), parabolic beats fixed 8 and the steerable pyramid at every budget from
+(48 bands each), parabolic beats fixed 8 and sp8 at every budget from
 1 % to 25 %. Anti-parabolic is worst (parabolic beats it 153/47), so it is the
 *direction* of the scaling that matters, not merely its unevenness. The kill condition
 did not fire.
@@ -55,7 +55,7 @@ did not fire.
 **2. Most of that is the known curvelet sparsity, and a smaller part may not be.** At
 equal reconstruction quality the gain over fixed 8 is not significant (H1m), so against
 fixed 8 parabolic mainly compresses better: Candès–Donoho, now measured on objects. Over
-the steerable pyramid a gain survives equal PSNR (H1mk). A post-hoc check (not
+sp8 a gain survives equal PSNR (H1mk). A post-hoc check (not
 pre-registered) shows window shape alone does not explain it: fixed 8 vs steerable
 pyramid at equal PSNR is 105/95, p = 0.52. So a beyond-sparsity object advantage of the
 parabolic law is **suggested, not established**: +0.0044 against fixed 8 at p = 0.10.
@@ -114,6 +114,14 @@ Rightmost: cross-scale coherence, bright where adjacent octaves agree in phase.*
 **Killed**
 - "The paper's window is better than curvelet steps" (H2)
 - "Phase-coherence ranking makes the rebuild more object-like" in G4's sense (H3)
+
+**Correction (Oct 27, from Astra's review).** `sp8` is the Simoncelli–Freeman *angular
+window* (|cos|^(K−1), 8 orientations) placed inside this repo's own undecimated tight
+frame, with the same radial octaves as every other arm. It is **not** a stock complex
+steerable pyramid, which uses its own radial filters and recursive subsampling. So H1k
+and H1mk show that parabolic beats that angular-window control in this frame. They do
+not show that it beats established steerable-pyramid systems; that comparison was
+never run.
 
 **Prior art.** Curvelets and the parabolic law: Candès & Donoho 2004. Steerable pyramid:
 Simoncelli & Freeman 1995. Phase-doubled cross-scale statistics p²/|p|: Portilla &
